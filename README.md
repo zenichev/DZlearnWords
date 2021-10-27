@@ -8,12 +8,16 @@ It's meant to be used under Debian/Ubuntu based desktop systems.
 It's not bound to any language, you can freely learn even other things using that.
 The source information for learning (the list of things to learn) is defined by you in advance,
 it must be a simple file of .txt extension, with words and translations.
+
 Syntax example: `<word>:<translation>`
+
 Example of the file:
-`$bash> cat /tmp/my_words_list.txt`
-`die Vermittlung:a mediation`
-`die Vorwarnung:a warning`
-`die Einschätzung:an estimation`
+```
+$bash> cat /tmp/my_words_list.txt
+die Vermittlung:a mediation
+die Vorwarnung:a warning
+die Einschätzung:an estimation
+```
 
 The method for learning implemented in this program,
 gives you a possibility to focus on your daily work,
@@ -39,7 +43,7 @@ Modes list:
 2. CLI menu mode / `--cli-menu` (default one)
 3. GUI mode / `--gui-mode` (not available at the moment)
 
-###### CLI mode
+### CLI mode
 
 Is used to launch the program with a pre-defined list of parameters.
 Here is a list of available parameters in this mode:
@@ -49,15 +53,22 @@ Here is a list of available parameters in this mode:
 * `--next-time-max` - maximum time border (used to pick random time step within it)
 
 An example of the program run in this mode:
+
 `$bash> ./main --cli-mode --open-file /tmp/file_name.txt --next-time-min 30 --next-time-max 50`
 
-###### CLI menu mode
+### CLI menu mode
 
 Is an interaction window, which gives you a possibility to pick out needed options as soon
 as you launch the program. Is a default mode, so if you want to run in this mode, you can either
-run the program as this: `$bash> ./main` or like this: `$bash> ./main --cli-menu`
+run the program as this:
 
-###### GUI mode
+`$bash> ./main`
+
+or like this:
+
+`$bash> ./main --cli-menu`
+
+### GUI mode
 
 Is under development. An intention is to provide a full support of the graphical interface
 and to deprecate interaction via CLI eventually.
