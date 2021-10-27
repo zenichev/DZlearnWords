@@ -37,8 +37,10 @@
 /* own headers */
 #include "dataKeeper.h"
 #include "SDLgraphics.h"
+#include "intro.h"
 
-#define ALLOWED_AMOUNT_ARGV			1				// alowed amount of arguments
+#define ALLOWED_AMOUNT_ARGV			10			// allowed amount of arguments
+#define ALLOWED_ARGV_LENGTH			20			// maximum allowed length of one argument
 #define ALLOWED_AMOUNT_LINES		50			// alowed amount of processable text lines
 #define NEXT_TIME_MIN						5				// min amount of seconds before next appear
 #define NEXT_TIME_MAX						10			// max amount of seconds before next appear

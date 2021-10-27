@@ -20,24 +20,86 @@
 
 int main(int agrc, char **argv)
 {
-		dataKeeper myData;
 		std::ifstream learningFile;
+
+		/* general required classes for the work */
+		mainMenu myMainMenu;
+		dataKeeper myData;
 		SDLgraphics myWindow;
 
-		std::string results;	// data to show
-
-		agrc = agrc - 1;
-		char * openedFile = argv[1];
+		/* work with words and buttons on cards */
 		int pressedBut = 0;
 		std::string pickedWord;
 
-		if (agrc != ALLOWED_AMOUNT_ARGV) {
-				printf("WARNING: wrong amount of arguments.\n");
+		/* data to show */
+		std::string results;
+
+		/* collect given arguments */
+		int tmp = agrc;
+		while (--tmp > 0) {
+			std::string argument(argv[tmp]);
+			if (argument.empty()) continue;
+			if (myMainMenu.CLIappendToArgvList(argument)) {
+				printf("WARNING: Something went wrong while appending arguments, terminating..\n");
+				return 1;
+			}
+		}
+		/* re-order arguments list, to let it look originally in the program */
+		std::reverse(myMainMenu.argvList.begin(), myMainMenu.argvList.end());
+
+		/* parse arguments and define the interaction mode
+			0 - interaction only via cli arguments
+			1 - interaction via usual cli menu
+			2 - interaction via gui menu */
+		int interactionMode = myMainMenu.defineTheMode();
+
+		/* ret: 0 - start processing cards / 1 - normal clearing / -1 - something went wrong */
+		int ret = 0;
+
+		switch (interactionMode) {
+			/* interaction only via cli arguments */
+			case 0:
+				if (!myMainMenu.inArguments(myMainMenu.argvList, ARG_OPEN_FILE)) {
+					printf("WARNING: --cli-mode picked out, but no source file provided.\n");
+					ret = -1;
+					break;
+				}
+				ret = myMainMenu.CLIgetPathSourceFile();	/* get file to open */
+				myMainMenu.CLIdefineTimeRanges();					/* define borders for a random time step */
+				break;
+			/* interaction via usual cli menu */
+			case 1:
+				ret = myMainMenu.launchInteractionWindow(); /* start usual cli menu */
+				break;
+			/* interaction via gui menu */
+			case 2:
+				printf("WARNING: Sorry, but the interaction via GUI is not available at the moment.\n");
+				printf("WARNING: Try to use the program in CLI mode / CLI menu mode\n");
+				ret = -1;
+				break;
+			default:
+				printf("WARNING: Cannot determine the interaction mode, terminating..\n");
+				ret = -1;
+				break;
+		}
+
+		/* basic checks before start flipping cards */
+		switch (ret) {
+			case -1:
+				printf("ERROR: Something went wrong, terminating the program.\n");
+				return 1;
+			case 1:
+				printf("DEBUG: Normal program clearing.\n");
+				return 0;
+		}
+
+		if (strlen(myMainMenu.openFile) == 0 ) {
+				printf("ERROR: Something went wrong, source file wasn't define properly.\n");
 				return 1;
 		}
 
-		/* try to open the given file and save all words stored inside */
-		learningFile.open(openedFile, std::ios::in);
+		/* try to open the given file and save all words in the memory stored inside */
+		learningFile.open(myMainMenu.openFile, std::ios::in);
 		if(learningFile.is_open()) {
 				std::string line;
 				while(getline(learningFile, line)) myData.appendToWords(line);
