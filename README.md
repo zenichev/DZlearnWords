@@ -73,8 +73,22 @@ or like this:
 Is under development. An intention is to provide a full support of the graphical interface
 and to deprecate interaction via CLI eventually.
 
+## Installation
+
+Pre-requirements:
+* SDL2 : `libsdl2-dev libsdl2-2.0 libsdl2-ttf-2.0 libsdl2-ttf-dev`
+* ncurses : `libncurses-devi libncurses6`
+
+For now there is no MakeFile for the program, nor cmake. You can simply compile it:
+`g++ dataKeeper.cpp dataKeeper.h SDLgraphics.cpp SDLgraphics.h intro.cpp intro.h main.h main.cpp -o ./main -lSDL2 -lncurses`
+
+Remarks:
+* you need to link SDL2 and ncurses when compiling
+* not necessarily g++ compiler must be used, you can use the one you prefer
+
 ## To do list:
 
 * add a program "memory" to remember forgotten words for the next run
 * implement GUI interface
 * add a possibility to flip only forgotten words and set aside already learned
+* add a Makefile file or either implement compilation automatization using cmake
