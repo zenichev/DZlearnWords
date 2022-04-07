@@ -20,12 +20,17 @@
 
 /* constructor */
 dataKeeper::dataKeeper()
-			: wordsAmount(0), wordsLearned(0), wordsForgotten(0), slotsIDs(0), nextTime(0) {};
+			: wordsAmount(0), wordsLearned(0), wordsForgotten(0), slotsIDs(0), nextTime(0) {
+		myLearnedWords = std::vector<std::string>( ALLOWED_AMOUNT_LINES );
+		myForgottenWords = std::vector<std::string>( ALLOWED_AMOUNT_LINES );
+};
 
 /* add new words to an existing list */
 void dataKeeper::appendToWords(std::string & newWord) {
-		myWords[wordsAmount] += newWord;
-		myIDs.push_back(wordsAmount++);
+		std::string wordItself = newWord.substr(0, newWord.find(DELIMITER));
+		std::string wordTranslation = newWord.substr(wordItself.length() + 1, newWord.find(DELIMITER));
+		myWords.insert(std::make_pair(wordItself, wordTranslation));
+		wordsAmount++;
 }
 
 /* define whether the word has been forgotten or has been learned */
@@ -46,10 +51,10 @@ void dataKeeper::setWordStatus(bool status, std::string & word) {
 }
 
 /* randomly return some word from an array */
-std::string dataKeeper::randomlyGiveWords() {
-		int nextID = *select_randomly(myIDs.begin(), myIDs.end());
-		myIDs.erase(std::remove(myIDs.begin(), myIDs.end(), nextID), myIDs.end());
-		return (std::string) myWords[nextID];
+std::pair<std::string, std::string> dataKeeper::randomlyGiveWords() {
+		std::pair<std::string, std::string> nextWord = *select_randomly(myWords.begin(), myWords.end());
+		myWords.erase(nextWord.first); /* remove it, in order to next time not use it again */
+		return nextWord;
 }
 
 /* return randomly picked amount of seconds till next window appearing */
@@ -76,16 +81,16 @@ Iter dataKeeper::select_randomly(Iter start, Iter end) {
 
 /* give a summary on learned and forgotten words */
 void dataKeeper::giveResults(std::string & givenResults) {
-	givenResults = givenResults + "\t\t[Words learned]\n";
+	givenResults = "[Words learned]\n";
 	for (auto it = myLearnedWords.begin(); it != myLearnedWords.end(); ++it)
 	{
 		std::string tmp = *it;
-		if(!tmp.empty()) givenResults = '\t' + givenResults + *it + " \n";
+		if(!tmp.empty()) givenResults = givenResults + "-   " + tmp + "\n";
 	}
-	givenResults = givenResults + "\t\t[Words forgotten]\n";
+	givenResults = givenResults + "\n[Words forgotten]\n";
 	for (auto it = myForgottenWords.begin(); it != myForgottenWords.end(); ++it)
 	{
 		std::string tmp = *it;
-		if(!tmp.empty()) givenResults = '\t' + givenResults + *it + " \n";
+		if(!tmp.empty()) givenResults = givenResults + "-   " + tmp + "\n";
 	}
 }

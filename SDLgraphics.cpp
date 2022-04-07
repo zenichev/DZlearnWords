@@ -35,11 +35,12 @@ SDLgraphics::SDLgraphics() {
 		buttons[1] = { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" };
 		buttons[2] = { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "stop learning" };
 
-		buttonOneMessage[0] = { 0, 0, "Gotcha!"};
+		buttonGotcha[0] = { 0, 0, "Gotcha!"};
+		buttonOk[0] = { 0, 0, "Okay"};
 }
 
 /* create a new window */
-void SDLgraphics::createNewWindow(int width, int height) {
+void SDLgraphics::createNewWindow(int width, int height, int window_type) {
 		if (width != 0)	w = width;
 		if (height != 0) h = height;
 		myWindow = SDL_CreateWindow("NaN", x, y, w, h, flags);
@@ -50,22 +51,23 @@ void SDLgraphics::createNewWindow(int width, int height) {
 		//SDL_SetWindowOpacity(myWindow, opacity);
 
 		messageboxdata.window = myWindow;
-		messageboxdata.numbuttons = SDL_arraysize(buttons);
-		messageboxdata.buttons = buttons;
 		messageboxdata.flags = SDL_MESSAGEBOX_INFORMATION;
-}
-
-void SDLgraphics::createResultWindow(int width, int height) {
-		if (width != 0)	w = width;
-		if (height != 0) h = height;
-		myWindow = SDL_CreateWindow("NaN", x, y, w, h, flags);
-		if (myWindow == nullptr) {
-				printf("DEBUG: SDL_CreateWindow Error: <%s> \n", SDL_GetError());
+		switch (window_type) {
+			case WINDOW_TYPE_QUIZ:
+				messageboxdata.numbuttons = SDL_arraysize(buttons);
+				messageboxdata.buttons = buttons;
+				break;
+			case WINDOW_TYPE_RESULT:
+				messageboxdata.numbuttons = SDL_arraysize(buttonGotcha);
+				messageboxdata.buttons = buttonGotcha;
+				break;
+			case WINDOW_TYPE_NO_ANSWER:
+				messageboxdata.numbuttons = SDL_arraysize(buttonOk);
+				messageboxdata.buttons = buttonOk;
+				break;
+      default:
+				printf("WARNING: no window type given, cannot prepare a window!\n");
 		}
-		messageboxdata.window = myWindow;
-		messageboxdata.numbuttons = SDL_arraysize(buttonOneMessage);
-		messageboxdata.buttons = buttonOneMessage;
-		messageboxdata.flags = SDL_MESSAGEBOX_INFORMATION;
 }
 
 int SDLgraphics::showWindow(const char *myTitle, const char *myMessage) {
@@ -74,11 +76,4 @@ int SDLgraphics::showWindow(const char *myTitle, const char *myMessage) {
 		SDL_ShowMessageBox(&messageboxdata, &buttonid);
 		SDL_DestroyWindow(myWindow);
 		return buttonid;
-}
-
-void SDLgraphics::showWindowOneButton(const char *myMessage) {
-		messageboxdata.title = "Given results:";
-		messageboxdata.message = myMessage;
-		SDL_ShowMessageBox(&messageboxdata, &buttonid);
-		SDL_DestroyWindow(myWindow);
 }

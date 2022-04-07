@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <iterator>
+#include <map>
 
 #include <random>
 #include <bits/stdc++.h>
@@ -34,20 +35,19 @@
 
 #include <algorithm>
 
-#define ALLOWED_AMOUNT_LINES		50			// alowed amount of processable text lines
+#define ALLOWED_AMOUNT_LINES    50			// alowed amount of processable text lines
 
-#define NEXT_TIME_MIN						5				// min amount of seconds before next appear
-#define NEXT_TIME_MAX						10			// max amount of seconds before next appear
+#define NEXT_TIME_MIN           5				// min amount of seconds before next appear
+#define NEXT_TIME_MAX           10			// max amount of seconds before next appear
+
+#define DELIMITER               ":"			// delimiter used to divide word and translation
 
 /* the class which is dedicated to work with the data */
 class dataKeeper {
 private:
-		std::vector<std::string> myWords = std::vector<std::string>( ALLOWED_AMOUNT_LINES );
-		std::vector<std::string> myLearnedWords = std::vector<std::string>( ALLOWED_AMOUNT_LINES );
-		std::vector<std::string> myForgottenWords = std::vector<std::string>( ALLOWED_AMOUNT_LINES );
-
-		/* a crutch, not to forget IDs already used within the session */
-		std::vector<int> myIDs;
+		std::map<std::string,std::string> myWords;
+		std::vector<std::string> myLearnedWords;
+		std::vector<std::string> myForgottenWords;
 
 		int wordsLearned;
 		int wordsForgotten;
@@ -63,15 +63,16 @@ private:
 		}
 public:
 		int wordsAmount;
-		const int & showStopperA = wordsLearned;
-		const int & showStopperB = wordsForgotten;
+		const int & showStopperA = wordsLearned; /* word learned */
+		const int & showStopperB = wordsForgotten; /* words forgotten */
 public:
 		dataKeeper();
 		~dataKeeper() {}
 
 		void appendToWords(std::string & newWord);
 		void setWordStatus(bool status, std::string & word);
-		std::string randomlyGiveWords();
+		void showTranslation();
+		std::pair<std::string, std::string> randomlyGiveWords();
 
 		int getNextTime();
 

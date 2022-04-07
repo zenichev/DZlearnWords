@@ -29,7 +29,7 @@ int main(int agrc, char **argv)
 
 		/* work with words and buttons on cards */
 		int pressedBut = 0;
-		std::string pickedWord;
+		std::pair<std::string, std::string> pickedWord;
 
 		/* data to show */
 		std::string results;
@@ -94,7 +94,8 @@ int main(int agrc, char **argv)
 		}
 
 		if (strlen(myMainMenu.openFile) == 0 ) {
-				printf("ERROR: Something went wrong, source file wasn't define properly.\n");
+				printf("ERROR: Something went wrong, the source file wasn't defined properly.\n");
+				printf("\tHave you given the proper path to a file? Try to launch the program again!\n");
 				return 1;
 		}
 
@@ -111,35 +112,40 @@ int main(int agrc, char **argv)
 		/* start showing the words and do that until an amount of cycles is done */
 		for(int cyclesPassed = 0; cyclesPassed < myData.wordsAmount; cyclesPassed++)
 		{
-				//char * myWord = (char *)myData.randomlyGiveWords().c_str();
-				myWindow.createNewWindow(0, 0);
+				myWindow.createNewWindow(0, 0, WINDOW_TYPE_QUIZ);
 				/* shows and destorys it */
-				pickedWord = myData.randomlyGiveWords().c_str();
-				pressedBut = myWindow.showWindow("The word to learn:", pickedWord.c_str());
+				pickedWord = myData.randomlyGiveWords();
+				pressedBut = myWindow.showWindow("The word to learn:", pickedWord.first.c_str());
 				switch(pressedBut) {
-						case 0: // no
-								myData.setWordStatus(false, pickedWord);
+						case 0: /* no */
+								myData.setWordStatus(false, pickedWord.first);
+								myWindow.createNewWindow(0, 0, WINDOW_TYPE_NO_ANSWER);
+								myWindow.showWindow("The translation was:", pickedWord.second.c_str());
 								break;
-						case 1: // yes
-								myData.setWordStatus(true, pickedWord);
+						case 1: /* yes */
+								myData.setWordStatus(true, pickedWord.first);
 								break;
-						case 2: // a termination of the program - normal clearing
+						case 2: /* a termination of the program - normal clearing */
 								printf("DEBUG: Thanks for using the program, good bye!\n");
 								return 0;
 						default:
 								break;
 				}
-				if (myData.showStopperA >= ALLOWED_AMOUNT_LINES ||
+
+				/* check if we have to stop cycline already now */
+				if (myData.showStopperA >= myData.wordsAmount ||
+						myData.showStopperB >= myData.wordsAmount ||
+						myData.showStopperA + myData.showStopperB >= myData.wordsAmount ||
+						myData.showStopperA >= ALLOWED_AMOUNT_LINES ||
 						myData.showStopperB >= ALLOWED_AMOUNT_LINES ||
 						myData.showStopperA + myData.showStopperB >= ALLOWED_AMOUNT_LINES
-				) break;	// quit the cycle if all processed
-				std::this_thread::sleep_for(std::chrono::seconds(myData.getNextTime())); // now sleep
+				) break;	/* quit the cycle if all processed */
+				std::this_thread::sleep_for(std::chrono::seconds(myData.getNextTime())); /* now sleep */
 		}
 
-		// show results
+		/* show results */
 		myData.giveResults(results);
-		myWindow.createResultWindow(0, 0);
-		myWindow.showWindowOneButton(results.c_str());
-
+		myWindow.createNewWindow(0, 0, WINDOW_TYPE_RESULT);
+		myWindow.showWindow("Given results:", results.c_str());
 		return 0;
 }

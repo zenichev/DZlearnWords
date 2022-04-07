@@ -61,6 +61,12 @@ private:
 		"4. Press to quit ;\nEnter choice: ";
 		const char *mainHelpInformation =
 		"Helpful information:\n"
+		"\t- Possible modes\n"
+		"\t\tModes - define a way a human can interact with the program.\n"
+		"\t\tThere are two main modes available and one in a stage of development:\n"
+		"\t\t--cli-menu - interactive cli based menu ;\n"
+		"\t\t--cli-mode - no cli menu at all, just cli arguments can be used ;\n"
+		"\t\t--gui-menu - graphical iface for launching the program (not available now) ;\n\n"
 		"\t- Time ranges\n"
 		"\t\tTime ranges - are time borders, which are used in order to tell the program\n"
 		"\t\twhat is the approximate value for the random time step choice.\n"

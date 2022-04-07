@@ -34,6 +34,10 @@
 
 #include <algorithm>
 
+#define WINDOW_TYPE_QUIZ          0
+#define WINDOW_TYPE_RESULT        1
+#define WINDOW_TYPE_NO_ANSWER     2
+
 /* the class responsible for visual part */
 class SDLgraphics {
 private:
@@ -50,15 +54,14 @@ private:
 		SDL_MessageBoxButtonData buttons[3] = {};
 		SDL_MessageBoxColorScheme colorScheme = {};
 
-		SDL_MessageBoxButtonData buttonOneMessage[1] = {};
+		SDL_MessageBoxButtonData buttonGotcha[1] = {};
+		SDL_MessageBoxButtonData buttonOk[1] = {};
 
 public:
 		SDLgraphics();
 		~SDLgraphics() {};
 
 		/* create a new window */
-		void createNewWindow(int width, int height);
-		void createResultWindow(int width, int height);
+		void createNewWindow(int width, int height, int window_type);
 		int showWindow(const char *myTitle, const char *myMessage);
-		void showWindowOneButton(const char *myMessage);
 };
