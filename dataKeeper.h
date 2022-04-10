@@ -35,12 +35,12 @@
 
 #include <algorithm>
 
-#define ALLOWED_AMOUNT_LINES    50			// alowed amount of processable text lines
+#define ALLOWED_AMOUNT_LINES    50      // alowed amount of processable text lines
 
-#define NEXT_TIME_MIN           5				// min amount of seconds before next appear
-#define NEXT_TIME_MAX           10			// max amount of seconds before next appear
+#define NEXT_TIME_MIN           5       // min amount of seconds before next appear
+#define NEXT_TIME_MAX           10      // max amount of seconds before next appear
 
-#define DELIMITER               ":"			// delimiter used to divide word and translation
+#define DELIMITER               ":"     // delimiter used to divide word and translation
 
 /* the class which is dedicated to work with the data */
 class dataKeeper {

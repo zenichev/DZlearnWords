@@ -64,12 +64,15 @@ int main(int agrc, char **argv)
 					ret = -1;
 					break;
 				}
-				ret = myMainMenu.CLIgetPathSourceFile();	/* get file to open */
-				myMainMenu.CLIdefineTimeRanges();					/* define borders for a random time step */
+				ret = myMainMenu.CLIsetSourceFile();      /* get file to open */
+				myMainMenu.CLIsetWorkingDir();						/* set working directory */
+				printf("----- DEBUG: working directory set to: <%s> -----\n", myMainMenu.workingDir);
+				myMainMenu.CLIdefineTimeRanges();         /* define borders for a random time step */
 				break;
 			/* interaction via usual cli menu */
 			case 1:
 				ret = myMainMenu.launchInteractionWindow(); /* start usual cli menu */
+				printf("----- DEBUG: working directory set to: <%s> -----\n", myMainMenu.workingDir);
 				break;
 			/* interaction via gui menu */
 			case 2:

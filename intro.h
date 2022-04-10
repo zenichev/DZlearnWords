@@ -31,89 +31,58 @@
 #include <unistd.h>
 #include <curses.h>
 
-#define ALLOWED_AMOUNT_ARGV				10			// allowed amount of arguments
-#define MAIN_MENU_GIVEN_ATTEMPTS 	3
-#define MAIN_MENU_CHOICE_AMOUNT		4				// possible values for the main menu
-#define NEXT_TIME_MIN							5				// min amount of seconds before next appear
-#define NEXT_TIME_MAX							10			// max amount of seconds before next appear
-#define ALLOWED_TIME_BORDERS_MIN	1				// minimum allowed value for nextTimeMin / nextTimeMax
-#define ALLOWED_TIME_BORDERS_MAX	60			// maximum allowed value for nextTimeMin / nextTimeMax
-#define MAX_LENGTH_FILE_PATH			100			// maximum allowed length for a file name including a path
+#define ALLOWED_AMOUNT_ARGV       10      // allowed amount of arguments
+#define MAIN_MENU_GIVEN_ATTEMPTS  3
+#define MAIN_MENU_CHOICE_AMOUNT   5       // possible values for the main menu
+#define NEXT_TIME_MIN             5       // min amount of seconds before next appear
+#define NEXT_TIME_MAX             10      // max amount of seconds before next appear
+#define ALLOWED_TIME_BORDERS_MIN  1       // minimum allowed value for nextTimeMin / nextTimeMax
+#define ALLOWED_TIME_BORDERS_MAX  60      // maximum allowed value for nextTimeMin / nextTimeMax
+#define MAX_LENGTH_FILE_PATH      100     // maximum allowed length for a file name including a path
+#define MAX_LENGTH_WORK_DIR       100     // maximum allowed length for a path to a work dir
+
+#define DEFAULT_WORK_DIR          "/tmp/"
+#define DEFAULT_WORK_DIR_LENGTH   6
 
 /* arguments list */
-#define ARG_CLI_MENU			"--cli-menu"		// interactive cli based menu
-#define ARG_GUI_MENU			"--gui-menu"		// GUI menu
-#define ARG_CLI_MODE			"--cli-mode"		// no menus at all, just cli arguments
+#define ARG_CLI_MENU      "--cli-menu"    // interactive cli based menu
+#define ARG_GUI_MENU      "--gui-menu"    // GUI menu
+#define ARG_CLI_MODE      "--cli-mode"    // no menus at all, just cli arguments
 
-#define ARG_OPEN_FILE			"--open-file"		// followed by the path to a file
-#define ARG_NEXT_TIME_MIN	"--next-time-min" // followed by min time (sec) before next appear
-#define ARG_NEXT_TIME_MAX	"--next-time-max" // followed by max time (sec) before next appear
-
+#define ARG_OPEN_FILE     "--open-file"   // followed by the path to a file
+#define ARG_SET_DIR       "--set-dir"     // followed by the directory path
+#define ARG_NEXT_TIME_MIN "--next-time-min" // followed by min time (sec) before next appear
+#define ARG_NEXT_TIME_MAX "--next-time-max" // followed by max time (sec) before next appear
 
 class mainMenu {
 private:
-		const char *mainInteractionWindow =
-		"Main menu:\n"
-		"0. Press to start ;\n"
-		"1. Press for definition of time ranges ;\n"
-		"2. Press for adding a new source file (words list) ;\n"
-		"3. Press for help ;\n"
-		"4. Press to quit ;\nEnter choice: ";
-		const char *mainHelpInformation =
-		"Helpful information:\n"
-		"\t- Possible modes\n"
-		"\t\tModes - define a way a human can interact with the program.\n"
-		"\t\tThere are two main modes available and one in a stage of development:\n"
-		"\t\t--cli-menu - interactive cli based menu ;\n"
-		"\t\t--cli-mode - no cli menu at all, just cli arguments can be used ;\n"
-		"\t\t--gui-menu - graphical iface for launching the program (not available now) ;\n\n"
-		"\t- Time ranges\n"
-		"\t\tTime ranges - are time borders, which are used in order to tell the program\n"
-		"\t\twhat is the approximate value for the random time step choice.\n"
-		"\t\tWhat does that mean? The program uses a random value for giving the cards out,\n"
-		"\t\twhich allows you to invoke your (human) memory all of the sudden. You don't exactly know\n"
-		"\t\twhen the next occurence of the card will happen. And that's the main point of it.\n"
-		"\t\tSo that, relax, do your work and when the next card appears, try to recall the word.\n\n"
-		"\t- The source file (words/phrases list)\n"
-		"\t\tThat is a source file you use, to give the program a list of words/phrases to learn.\n"
-		"\t\tThe syntax for defining words is as follows:\n"
-		"\t\t\t<word>:<translation>\n"
-		"\t\tEach new word must be defined beginning from the next row, consider this:\n"
-		"\t\t\t$bash> cat /tmp/my_words_list.txt\n"
-		"\t\t\t\tdie Vermittlung:a mediation\n"
-		"\t\t\t\tdie Vorwarnung:a warning\n"
-		"\t\t\t\tdie Einschätzung:an estimation\n"
-		"\t\tThe maximum amount of words is limited by the definition: ALLOWED_AMOUNT_LINES.\n\n"
-		"\t- Options to be used in --cli-mode\n"
-		"\t\t'--open-file' - a source file to open.\n"
-		"\t\t'--next-time-min' - the minimum time step for randomity.\n"
-		"\t\t'--next-time-max' - the maximum time step for randomity.\n"
-		"\nPress any key to continue.. ";
+		const char * mainInteractionWindow;
+		const char * mainHelpInformation;
 
-		char * ch = (char*) malloc( sizeof(char) * ( 2 + 1 ) ); /* give a possibility to enter 2digit*/
+		char * ch;       /* give a possibility to enter 2digit*/
 		int nextTimeMin;
 		int nextTimeMax;
 
 		int argvAmount;
 
 public:
-		std::vector<std::string> argvList = std::vector<std::string>( ALLOWED_AMOUNT_ARGV );
-		//static char openFile[MAX_LENGTH_FILE_PATH];
-		//char openFile[MAX_LENGTH_FILE_PATH];
-		char * openFile = (char*) malloc( sizeof(char) * ( MAX_LENGTH_FILE_PATH + 1 ) );
+		std::vector<std::string> argvList;
+		char * openFile;
+		char * workingDir;
 public:
 		mainMenu();
-		//~mainMenu();
 
 		/* interaction via cli based interactive menu */
 		int launchInteractionWindow();
 		int defineTimeRanges();
 		int addNewSourceList();
+		int setWorkingDir();
 		int provideHelp();
 
 		/* interaction via cli arguments */
 		int CLIappendToArgvList(std::string & arg);
-		int CLIgetPathSourceFile();
+		int CLIsetSourceFile();
+		void CLIsetWorkingDir();
 		void CLIdefineTimeRanges();
 
 		/* other */
