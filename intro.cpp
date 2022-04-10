@@ -126,6 +126,12 @@ int mainMenu::launchInteractionWindow() {
 		switch(choice) {
 			/* start flipping the cards */
 			case 0:
+				/* make sure working directory is set, otherwise set to the default one */
+				if (strlen(workingDir) == 0) {
+					memcpy(workingDir, DEFAULT_WORK_DIR, DEFAULT_WORK_DIR_LENGTH);
+					workingDir[DEFAULT_WORK_DIR_LENGTH] = '\0';
+					printf("NOTICE: Working directory is set to default: %s \n", DEFAULT_WORK_DIR);
+				}
 				return 0;
 			/* for definition of time ranges */
 			case 1:
