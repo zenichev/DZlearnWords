@@ -66,11 +66,11 @@ mainMenu::mainMenu() : nextTimeMin(NEXT_TIME_MIN), nextTimeMax(NEXT_TIME_MAX), a
 	"\t\tfor the program will be stored. If the program will have no permission to that directory\n"
 	"\t\tsome of the functionality will be unavailable for you.\n\n"
 	"\t- Options to be used in the --cli-mode\n"
-	"\t\t'--open-file' - a source file to open.\n"
-	"\t\t'--set-dir' - set a working directory for the program.\n"
+	"\t\t'--help'          - a help information.\n"
+	"\t\t'--open-file'     - a source file to open.\n"
+	"\t\t'--set-dir'       - set a working directory for the program.\n"
 	"\t\t'--next-time-min' - the minimum time step for randomity.\n"
-	"\t\t'--next-time-max' - the maximum time step for randomity.\n"
-	"\nPress any key to continue.. ";
+	"\t\t'--next-time-max' - the maximum time step for randomity.\n";
 };
 
 /** general interaction window with possible options
@@ -160,7 +160,7 @@ int mainMenu::launchInteractionWindow() {
 				break;
 			/* for help */
 			case 4:
-				if ((ret = mainMenu::provideHelp()) != 0) {
+				if ((ret = provideHelp()) != 0) {
 					printf("WARNING: Something went wrong. Terminating the program.\n");
 					return -1;
 				}
@@ -187,26 +187,26 @@ int mainMenu::defineTimeRanges() {
 		std::system("clear");
 		printf("Define time ranges:\n\tMinimum time step for randomity (without quotes): ");
 
-		if ((temp=scanf("%d",&(mainMenu::nextTimeMin))) <= 0) {
+		if ((temp=scanf("%d",&(nextTimeMin))) <= 0) {
 					printf("\tWARNING: Impossible to set this value, setting to default.\n\n");
-					mainMenu::nextTimeMin = ALLOWED_TIME_BORDERS_MIN;
+					nextTimeMin = ALLOWED_TIME_BORDERS_MIN;
 		}
-		if (mainMenu::nextTimeMin < ALLOWED_TIME_BORDERS_MIN ||
-				mainMenu::nextTimeMin > ALLOWED_TIME_BORDERS_MAX) {
+		if (nextTimeMin < ALLOWED_TIME_BORDERS_MIN ||
+				nextTimeMin > ALLOWED_TIME_BORDERS_MAX) {
 			printf("\tWARNING: The given value is outside of the borders, setting to default.\n\n");
-			mainMenu::nextTimeMin = ALLOWED_TIME_BORDERS_MIN;
+			nextTimeMin = ALLOWED_TIME_BORDERS_MIN;
 		}
 
 		printf("\tMaximum time step for randomity (without quotes): ");
 
-		if ((temp=scanf("%d",&(mainMenu::nextTimeMax))) <= 0) {
+		if ((temp=scanf("%d",&(nextTimeMax))) <= 0) {
 					printf("\tWARNING: Impossible to set this value, setting to default.\n\n");
-					mainMenu::nextTimeMin = ALLOWED_TIME_BORDERS_MAX;
+					nextTimeMin = ALLOWED_TIME_BORDERS_MAX;
 		}
-		if (mainMenu::nextTimeMax < ALLOWED_TIME_BORDERS_MIN ||
-				mainMenu::nextTimeMax > ALLOWED_TIME_BORDERS_MAX) {
+		if (nextTimeMax < ALLOWED_TIME_BORDERS_MIN ||
+				nextTimeMax > ALLOWED_TIME_BORDERS_MAX) {
 			printf("\tWARNING: The given value is outside of the borders, setting to default.\n\n");
-			mainMenu::nextTimeMax = ALLOWED_TIME_BORDERS_MAX;
+			nextTimeMax = ALLOWED_TIME_BORDERS_MAX;
 		}
 
 		return 0;
@@ -217,12 +217,12 @@ int mainMenu::addNewSourceList() {
 		int temp = 0;
 		int takenAttempts = 0;
 
-		memset(mainMenu::openFile,0,MAX_LENGTH_FILE_PATH + 1);
+		memset(openFile,0,MAX_LENGTH_FILE_PATH + 1);
 
 		std::system("clear");
 		printf("Define a source file to read (without quotes): ");
 
-		while ((temp=scanf("%s",mainMenu::openFile)) <= 0 &&
+		while ((temp=scanf("%s",openFile)) <= 0 &&
 			takenAttempts < MAIN_MENU_GIVEN_ATTEMPTS) {
 				printf("\tWARNING: Impossible to set this value, try again.\n");
 				printf("\tDefine a source file to read (without quotes): ");
@@ -262,13 +262,16 @@ int mainMenu::setWorkingDir() {
 		return 0;
 }
 
-/* basic help */
+/* basic help the terminal based menu */
 int mainMenu::provideHelp() {
 		std::system("clear");
 
+		const char * additional = "\nPress any key to continue.. \n";
+
 		/* a way to implement 'press any key' using ncurses, not the best one */
 		initscr();
-		addstr( mainMenu::mainHelpInformation );
+		addstr( mainHelpInformation );
+		addstr( additional );
 		cbreak();    /* turn off line-buffering */
 		noecho();    /* turn off character echo */
 		getch();     /* read and discard a single character (caveats!) */
@@ -277,6 +280,11 @@ int mainMenu::provideHelp() {
 		endwin();
 
 		return 0;
+}
+
+/* basic help for CLI */
+void mainMenu::CLIprovideHelp() {
+	printf("%s", mainHelpInformation);
 }
 
 /*
@@ -422,11 +430,11 @@ void mainMenu::CLIdefineTimeRanges() {
 			++it; /* next after that must be a value */
 			tmp = *it;
 			if (!tmp.empty()) {
-				mainMenu::nextTimeMin = atoi(tmp.c_str());
-				if (mainMenu::nextTimeMin == 0) {
+				nextTimeMin = atoi(tmp.c_str());
+				if (nextTimeMin == 0) {
 					printf("WARNING: Wrong value has been given for <%s>. Setting to default.\n",
 								ARG_NEXT_TIME_MIN);
-					mainMenu::nextTimeMin = NEXT_TIME_MIN;
+					nextTimeMin = NEXT_TIME_MIN;
 				}
 			}
 		}
@@ -435,11 +443,11 @@ void mainMenu::CLIdefineTimeRanges() {
 			++it; /* next after that must be a value */
 			tmp = *it;
 			if (!tmp.empty()) {
-				mainMenu::nextTimeMax = atoi(tmp.c_str());
-				if (mainMenu::nextTimeMax == 0) {
+				nextTimeMax = atoi(tmp.c_str());
+				if (nextTimeMax == 0) {
 					printf("WARNING: Wrong value has been given for <%s>. Setting to default.\n",
 								ARG_NEXT_TIME_MAX);
-					mainMenu::nextTimeMax = NEXT_TIME_MAX;
+					nextTimeMax = NEXT_TIME_MAX;
 				}
 			}
 		}

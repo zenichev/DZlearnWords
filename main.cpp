@@ -59,6 +59,14 @@ int main(int agrc, char **argv)
 		switch (interactionMode) {
 			/* interaction only via cli arguments */
 			case 0:
+				/* check whether user wants a help output */
+				if (myMainMenu.inArguments(myMainMenu.argvList, ARG_HELP_MENU)) {
+					myMainMenu.CLIprovideHelp();
+					ret = 1;
+					break;
+				}
+
+				/* if the source file with data not defined, terminate */
 				if (!myMainMenu.inArguments(myMainMenu.argvList, ARG_OPEN_FILE)) {
 					printf("WARNING: --cli-mode picked out, but no source file provided.\n");
 					ret = -1;
@@ -66,13 +74,11 @@ int main(int agrc, char **argv)
 				}
 				ret = myMainMenu.CLIsetSourceFile();      /* get file to open */
 				myMainMenu.CLIsetWorkingDir();						/* set working directory */
-				printf("----- DEBUG: working directory set to: <%s> -----\n", myMainMenu.workingDir);
 				myMainMenu.CLIdefineTimeRanges();         /* define borders for a random time step */
 				break;
 			/* interaction via usual cli menu */
 			case 1:
 				ret = myMainMenu.launchInteractionWindow(); /* start usual cli menu */
-				printf("----- DEBUG: working directory set to: <%s> -----\n", myMainMenu.workingDir);
 				break;
 			/* interaction via gui menu */
 			case 2:

@@ -49,6 +49,7 @@
 #define ARG_GUI_MENU      "--gui-menu"    // GUI menu
 #define ARG_CLI_MODE      "--cli-mode"    // no menus at all, just cli arguments
 
+#define ARG_HELP_MENU     "--help"        // gives you a help output
 #define ARG_OPEN_FILE     "--open-file"   // followed by the path to a file
 #define ARG_SET_DIR       "--set-dir"     // followed by the directory path
 #define ARG_NEXT_TIME_MIN "--next-time-min" // followed by min time (sec) before next appear
@@ -84,6 +85,7 @@ public:
 		int CLIsetSourceFile();
 		void CLIsetWorkingDir();
 		void CLIdefineTimeRanges();
+		void CLIprovideHelp();
 
 		/* other */
 		int defineTheMode();
