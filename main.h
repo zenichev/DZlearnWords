@@ -39,13 +39,7 @@
 #include "SDLgraphics.h"
 #include "intro.h"
 
-#define ALLOWED_AMOUNT_ARGV			10			// allowed amount of arguments
-#define ALLOWED_ARGV_LENGTH			20			// maximum allowed length of one argument
 #define ALLOWED_AMOUNT_LINES		50			// alowed amount of processable text lines
-#define NEXT_TIME_MIN						5				// min amount of seconds before next appear
-#define NEXT_TIME_MAX						10			// max amount of seconds before next appear
-#define FOR_HOW_LONG						1800		// time in seconds the program will run
-#define FOR_HOW_MAY_CYCLES			10			// cycles to be processed
 
 /* button ids which I use to identify the pressed one */
 #define NO_BUTTON								0

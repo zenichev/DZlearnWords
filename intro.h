@@ -31,7 +31,7 @@
 #include <unistd.h>
 #include <curses.h>
 
-#define ALLOWED_AMOUNT_ARGV       10      // allowed amount of arguments
+#define ALLOWED_AMOUNT_ARGV       20      // allowed amount of arguments
 #define MAIN_MENU_GIVEN_ATTEMPTS  3
 #define MAIN_MENU_CHOICE_AMOUNT   5       // possible values for the main menu
 #define NEXT_TIME_MIN             5       // min amount of seconds before next appear
@@ -89,6 +89,7 @@ public:
 
 		/* other */
 		int defineTheMode();
+		bool argvListEmpty();
 
 		/* search for an argument in arguments list */
 		bool inArguments(const std::vector<std::string> & array, const std::string & value) {

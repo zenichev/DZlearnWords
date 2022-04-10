@@ -309,6 +309,8 @@ int mainMenu::CLIappendToArgvList(std::string & arg) {
  */
 int mainMenu::defineTheMode() {
 	int ret = 1; /* default - via cli menu */
+	bool modeDefined = false;
+
 	for (auto it = argvList.begin(); it != argvList.end(); ++it)
 	{
 		std::string tmp = *it;
@@ -317,20 +319,40 @@ int mainMenu::defineTheMode() {
 		/* interaction using cli arguments */
 		if(tmp == ARG_CLI_MODE) {
 			ret = 0;
+			modeDefined = true;
 			break;
 
 		/* interaction using cli menu */
 		} else if(tmp == ARG_CLI_MENU) {
 			ret = 1;
+			modeDefined = true;
 			break;
 
 		/* interaction using graphical interface */
 		} else if(tmp == ARG_GUI_MENU) {
 			ret = 2;
+			modeDefined = true;
 			break;
 		}
 	}
+
+	/* no mode defined and arguments present, then act as the cli mode */
+	if (!modeDefined && !argvListEmpty()) ret = 0;
+
 	return ret;
+}
+
+/* check whether argv list is empty */
+bool mainMenu::argvListEmpty() {
+	for (auto it = argvList.begin(); it != argvList.end(); ++it)
+	{
+		std::string tmp = *it;
+		if (!tmp.empty()) {
+			printf("----- DEBUG: <%s> argument is not empty -----\n", tmp.c_str());
+			return false;
+		}
+	}
+	return true;
 }
 
 /** get a path to the source file
