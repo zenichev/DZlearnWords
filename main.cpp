@@ -102,6 +102,8 @@ int main(int agrc, char **argv)
 				return 0;
 		}
 
+		printf("DEBUG: Working directory has been set to: %s \n", myMainMenu.workingDir);
+
 		if (strlen(myMainMenu.openFile) == 0 ) {
 				printf("ERROR: Something went wrong, the source file wasn't defined properly.\n");
 				printf("\tHave you given the proper path to a file? Try to launch the program again!\n");
@@ -156,5 +158,10 @@ int main(int agrc, char **argv)
 		myData.giveResults(results);
 		myWindow.createNewWindow(0, 0, WINDOW_TYPE_RESULT);
 		myWindow.showWindow("Given results:", results.c_str());
+
+		/* save data for the next program run */
+		if (myData.saveCurrentResults(results, myMainMenu.workingDir))
+			printf("WARNING: Not able to save results!\n");
+
 		return 0;
 }

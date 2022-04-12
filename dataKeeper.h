@@ -42,6 +42,8 @@
 
 #define DELIMITER               ":"     // delimiter used to divide word and translation
 
+#define RESULTS_FILE_NAME       "last_run.deck" // file with results of previous run
+
 /* the class which is dedicated to work with the data */
 class dataKeeper {
 private:
@@ -83,4 +85,6 @@ public:
 		Iter select_randomly(Iter start, Iter end);
 
 		void giveResults(std::string & givenResults);
+
+		int saveCurrentResults(std::string & givenResults, const char * dir);
 };

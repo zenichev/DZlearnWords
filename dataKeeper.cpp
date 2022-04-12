@@ -94,3 +94,20 @@ void dataKeeper::giveResults(std::string & givenResults) {
 		if(!tmp.empty()) givenResults = givenResults + "-   " + tmp + "\n";
 	}
 }
+
+/* save results for the next program run */
+int dataKeeper::saveCurrentResults(std::string & givenResults, const char * dir) {
+	std::ofstream resultsFile;
+	std::string filename = dir;
+	filename = filename + "/" + RESULTS_FILE_NAME;
+
+	resultsFile.open(filename, std::ios::out);
+	if(resultsFile.is_open()) {
+		resultsFile << givenResults;
+		resultsFile.close();
+		return 0;
+	}
+
+	printf("ERROR: cannot create/open the requested file, please try again.\n");
+	return 1;
+}

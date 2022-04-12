@@ -353,10 +353,7 @@ bool mainMenu::argvListEmpty() {
 	for (auto it = argvList.begin(); it != argvList.end(); ++it)
 	{
 		std::string tmp = *it;
-		if (!tmp.empty()) {
-			printf("----- DEBUG: <%s> argument is not empty -----\n", tmp.c_str());
-			return false;
-		}
+		if (!tmp.empty()) return false;
 	}
 	return true;
 }
